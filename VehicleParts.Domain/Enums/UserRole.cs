@@ -1,8 +1,8 @@
 namespace VehicleParts.Domain.Enums;
 
-public enum UserRole
+public static class UserRoles
 {
-    Admin,
-    Staff,
-    Customer
+    public const string Admin = "Admin";
+    public const string Staff = "Staff";
+    public const string Customer = "Customer";
 }

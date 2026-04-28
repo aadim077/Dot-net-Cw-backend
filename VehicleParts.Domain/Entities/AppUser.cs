@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace VehicleParts.Domain.Entities;
 
-public class AppUser : BaseEntity
+public class AppUser : IdentityUser
 {
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty;
-    public Enums.UserRole Role { get; set; } = Enums.UserRole.Customer;
+    public string FullName { get; set; } = string.Empty;
+    public bool IsActive { get; set; } = true;
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
 }
