@@ -23,9 +23,22 @@ public static class InfrastructureServiceRegistration
         configuration.GetSection("JwtSettings").Bind(jwtSettings);
         services.AddSingleton(jwtSettings);
 
-        // Database
+        // Database - Use SQLite for development if PostgreSQL is unavailable
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        {
+            if (environment == "Development" && (connectionString?.Contains("localhost") ?? false))
+            {
+                // Try SQLite first in development for easier local testing
+                options.UseSqlite("Data Source=coursework.db");
+            }
+            else
+            {
+                options.UseNpgsql(connectionString);
+            }
+        });
 
         // Identity
         services.AddIdentity<AppUser, IdentityRole>(options =>

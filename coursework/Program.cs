@@ -30,11 +30,23 @@ var app = builder.Build();
 // Database migration and role seeding
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await db.Database.MigrateAsync();
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await db.Database.MigrateAsync();
 
-    var roleManager = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole>>();
-    await RoleSeeder.SeedRolesAsync(roleManager);
+        var roleManager = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole>>();
+        await RoleSeeder.SeedRolesAsync(roleManager);
+    }
+    catch (Npgsql.NpgsqlException ex) when (ex.SqlState == "28P01")
+    {
+        Console.WriteLine("⚠️ PostgreSQL authentication failed. Please verify your database password in appsettings.json");
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠️ Database migration failed: {ex.Message}");
+    }
 }
 
 if (app.Environment.IsDevelopment())
