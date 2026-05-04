@@ -14,6 +14,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<Vendor> Vendors { get; set; }
     public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
     public DbSet<PurchaseInvoiceItem> PurchaseInvoiceItems { get; set; }
+    public DbSet<SalesInvoice> SalesInvoices { get; set; }
+    public DbSet<SalesInvoiceItem> SalesInvoiceItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
