@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using VehicleParts.Application.Interfaces;
+using VehicleParts.Application.Services;
 using VehicleParts.Infrastructure.Data;
-
+using VehicleParts.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +21,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 
 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddScoped<ISaleInvoiceRepository, SaleInvoiceRepository>();
+builder.Services.AddScoped<IPartRepository, PartRepository>();
+
+builder.Services.AddScoped<ISaleInvoiceService, SaleInvoiceService>();
 
 var app = builder.Build();
 
