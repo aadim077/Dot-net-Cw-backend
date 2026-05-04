@@ -27,6 +27,9 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Add the global exception handler as the very first middleware
+app.UseMiddleware<coursework.Middlewares.GlobalExceptionMiddleware>();
+
 // Database migration and role seeding
 using (var scope = app.Services.CreateScope())
 {
