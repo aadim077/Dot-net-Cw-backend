@@ -12,15 +12,15 @@ using VehicleParts.Infrastructure.Data;
 namespace VehicleParts.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260428033629_IntegrateIdentity")]
-    partial class IntegrateIdentity
+    [Migration("20260510160920_InitialIdentitySetup")]
+    partial class InitialIdentitySetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

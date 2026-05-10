@@ -9,9 +9,9 @@ builder.Services.AddControllers();
 // Add Infrastructure services (EF Core, Identity, JWT, Authorization)
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Swagger/OpenAPI configuration (temporarily disabled due to compatibility issues)
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
+// Swagger/OpenAPI configuration
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // CORS for development
 builder.Services.AddCors(options =>
@@ -39,8 +39,8 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.UseCors("DevPolicy");
 }
 
