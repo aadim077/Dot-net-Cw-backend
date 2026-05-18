@@ -76,6 +76,9 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICustomerProfileService, CustomerProfileService>();
+        services.AddScoped<IAppointmentService, AppointmentService>();
+        services.AddScoped<IUnavailablePartRequestService, UnavailablePartRequestService>();
+        services.AddScoped<IReviewService, ReviewService>();
 
         return services;
     }

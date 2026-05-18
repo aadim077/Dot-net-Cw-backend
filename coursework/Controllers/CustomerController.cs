@@ -12,10 +12,20 @@ namespace coursework.Controllers;
 public class CustomerController : ControllerBase
 {
     private readonly ICustomerProfileService _service;
+    private readonly IAppointmentService _appointmentService;
+    private readonly IUnavailablePartRequestService _unavailablePartRequestService;
+    private readonly IReviewService _reviewService;
 
-    public CustomerController(ICustomerProfileService service)
+    public CustomerController(
+        ICustomerProfileService service,
+        IAppointmentService appointmentService,
+        IUnavailablePartRequestService unavailablePartRequestService,
+        IReviewService reviewService)
     {
         _service = service;
+        _appointmentService = appointmentService;
+        _unavailablePartRequestService = unavailablePartRequestService;
+        _reviewService = reviewService;
     }
 
     private string? GetUserId()
@@ -103,5 +113,77 @@ public class CustomerController : ControllerBase
         if (!result.IsSuccess)
             return NotFound(result.Message);
         return NoContent();
+    }
+
+    // 1. POST customer appointment booking
+    [HttpPost("appointments")]
+    public async Task<IActionResult> BookAppointment([FromBody] VehicleParts.Application.DTOs.Appointments.AppointmentRequestDto dto)
+    {
+        var userId = GetUserId();
+        if (userId == null)
+            return Unauthorized();
+        var result = await _appointmentService.BookAppointmentAsync(userId, dto);
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        return Ok(result.Data);
+    }
+
+    // 2. GET customer appointments
+    [HttpGet("appointments")]
+    public async Task<IActionResult> GetAppointments()
+    {
+        var userId = GetUserId();
+        if (userId == null)
+            return Unauthorized();
+        var result = await _appointmentService.GetAppointmentsAsync(userId);
+        return Ok(result.Data);
+    }
+
+    // 3. POST unavailable part request
+    [HttpPost("unavailable-parts")]
+    public async Task<IActionResult> RequestUnavailablePart([FromBody] VehicleParts.Application.DTOs.UnavailableParts.UnavailablePartRequestDto dto)
+    {
+        var userId = GetUserId();
+        if (userId == null)
+            return Unauthorized();
+        var result = await _unavailablePartRequestService.RequestUnavailablePartAsync(userId, dto);
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        return Ok(result.Data);
+    }
+
+    // 4. GET unavailable part requests
+    [HttpGet("unavailable-parts")]
+    public async Task<IActionResult> GetUnavailablePartRequests()
+    {
+        var userId = GetUserId();
+        if (userId == null)
+            return Unauthorized();
+        var result = await _unavailablePartRequestService.GetUnavailablePartRequestsAsync(userId);
+        return Ok(result.Data);
+    }
+
+    // 5. POST review submission
+    [HttpPost("reviews")]
+    public async Task<IActionResult> SubmitReview([FromBody] VehicleParts.Application.DTOs.Reviews.ReviewRequestDto dto)
+    {
+        var userId = GetUserId();
+        if (userId == null)
+            return Unauthorized();
+        var result = await _reviewService.SubmitReviewAsync(userId, dto);
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+        return Ok(result.Data);
+    }
+
+    // 6. GET reviews
+    [HttpGet("reviews")]
+    public async Task<IActionResult> GetReviews()
+    {
+        var userId = GetUserId();
+        if (userId == null)
+            return Unauthorized();
+        var result = await _reviewService.GetReviewsAsync(userId);
+        return Ok(result.Data);
     }
 }
